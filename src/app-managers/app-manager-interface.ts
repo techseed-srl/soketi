@@ -20,4 +20,6 @@ export interface AppManagerInterface {
      * Get the app secret by ID.
      */
     getAppSecret(id: string): Promise<string|null>;
+
+    listApps(): Promise<App[]>
 }

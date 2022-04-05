@@ -149,11 +149,14 @@ export class WebhookSender {
 
         // TODO: Maybe have one queue per app to reserve queue thresholds?
         if (server.canProcessQueues()) {
+            server.queueManager.processQueue('server_startup_webhooks', queueProcessor);
             server.queueManager.processQueue('client_event_webhooks', queueProcessor);
             server.queueManager.processQueue('member_added_webhooks', queueProcessor);
             server.queueManager.processQueue('member_removed_webhooks', queueProcessor);
             server.queueManager.processQueue('channel_vacated_webhooks', queueProcessor);
             server.queueManager.processQueue('channel_occupied_webhooks', queueProcessor);
+            server.queueManager.processQueue('subscription_succeded_webhooks', queueProcessor);
+            server.queueManager.processQueue('subscription_closed_webhooks', queueProcessor);
         }
     }
 
@@ -181,6 +184,16 @@ export class WebhookSender {
         }
 
         this.send(app, formattedData, 'client_event_webhooks');
+    }
+
+    public sendServerStartup(app: App): void {
+        if (!app.hasServerStartupWebhooks) {
+            return;
+        }
+        this.sendWebhook(app, {
+            name: App.SERVER_STARTUP_WEBHOOK,
+            channel:'startup',
+        }, 'server_startup_webhooks');
     }
 
     /**
@@ -241,10 +254,38 @@ export class WebhookSender {
         }, 'channel_occupied_webhooks');
     }
 
+    public sendSubscriptionClosed(app: App,  id: string|null = null, channel: string): void {
+        if (!app.hasSubscriptionClosedWebhooks) {
+            return;
+        }
+
+        this.send(app, {
+            name: App.SUBSCRIPTION_CLOSED_WEBHOOK,
+            socket_id: id,
+            channel,
+        }, 'subscription_closed_webhooks');
+    }
+
+    /**
+     * Send a channel_occupied event.
+     */
+    public sendSubscriptionSucceded(app: App, id: string|null,  channel: string): void {
+        if (!app.hasSubscriptionSuccededWebhooks) {
+            return;
+        }
+
+        this.send(app, {
+            name: App.SUBSCRIPTION_SUCCEDED_WEBHOOK,
+            socket_id: id,
+            channel,
+        }, 'subscription_succeded_webhooks');
+    }
+
     /**
      * Send a webhook for the app with the given data.
      */
     protected send(app: App, data: ClientEventData, queueName: string): void {
+        data.time_ms = (new Date).getTime();
         if (this.server.options.webhooks.batching.enabled) {
             this.sendWebhookByBatching(app, data, queueName);
         } else {

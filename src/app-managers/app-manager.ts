@@ -81,4 +81,8 @@ export class AppManager implements AppManagerInterface {
     getAppSecret(id: string): Promise<string|null> {
         return this.driver.getAppSecret(id);
     }
+
+    listApps(): Promise<App[]> {
+        return this.driver.listApps()
+    }
 }

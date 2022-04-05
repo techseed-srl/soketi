@@ -1,7 +1,7 @@
 {
-  "name": "@soketi/soketi",
+  "name": "@techseed/soketi",
   "version": "0.0.0-dev",
-  "description": "Just another simple, fast, and resilient open-source WebSockets server.",
+  "description": "Just another simple, fast, and resilient open-source WebSockets server fork.",
   "repository": {
     "type": "git",
     "url": "https://github.com/soketi/soketi.git"

@@ -48,4 +48,11 @@ export class ArrayAppManager extends BaseAppManager {
             }
         });
     }
+
+    listApps(): Promise<App[]> {
+        return new Promise(resolve=>{
+            let appList = this.server.options.appManager.array.apps.map((a)=>new App(a, this.server));
+            resolve(appList);
+        });
+    }
 }

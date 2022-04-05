@@ -345,6 +345,8 @@ export class Server {
                     Log.info('⚡ Initializing the HTTP API & Websockets Server...');
                 }
 
+                
+
                 let server: TemplatedApp = this.shouldConfigureSsl()
                     ? uWS.SSLApp({
                         key_file_name: this.options.ssl.keyPath,
@@ -356,9 +358,13 @@ export class Server {
 
                 let metricsServer: TemplatedApp = uWS.App();
 
+                
+
                 if (this.options.debug) {
                     Log.info('⚡ Initializing the Websocket listeners and channels...');
                 }
+
+                this.appManager.listApps().then(apps => apps.forEach(app => this.webhookSender.sendServerStartup(app)));
 
                 this.configureWebsockets(server).then(server => {
                     if (this.options.debug) {
@@ -372,7 +378,6 @@ export class Server {
 
                                 server.listen('0.0.0.0', this.options.port, serverProcess => {
                                     this.serverProcess = serverProcess;
-
                                     Log.successTitle('🎉 Server is up and running!');
                                     Log.successTitle(`📡 The Websockets server is available at 127.0.0.1:${this.options.port}`);
                                     Log.successTitle(`🔗 The HTTP API server is available at http://127.0.0.1:${this.options.port}`);

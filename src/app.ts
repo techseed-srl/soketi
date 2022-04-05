@@ -137,6 +137,10 @@ export class App implements AppInterface {
     /**
      * @type {boolean}
      */
+     public hasServerStartupWebhooks = false;
+    /**
+     * @type {boolean}
+     */
     public hasClientEventWebhooks = false;
 
     /**
@@ -148,6 +152,15 @@ export class App implements AppInterface {
      * @type {boolean}
      */
     public hasChannelVacatedWebhooks = false;
+    /**
+     * @type {boolean}
+     */
+    public hasSubscriptionSuccededWebhooks = false;
+
+    /**
+     * @type {boolean}
+     */
+    public hasSubscriptionClosedWebhooks = false;
 
     /**
      * @type {boolean}
@@ -159,9 +172,12 @@ export class App implements AppInterface {
      */
     public hasMemberRemovedWebhooks = false;
 
+    static readonly SERVER_STARTUP_WEBHOOK = 'server_startup';
     static readonly CLIENT_EVENT_WEBHOOK = 'client_event';
     static readonly CHANNEL_OCCUPIED_WEBHOOK = 'channel_occupied';
     static readonly CHANNEL_VACATED_WEBHOOK = 'channel_vacated';
+    static readonly SUBSCRIPTION_SUCCEDED_WEBHOOK = 'subscription_succeded';
+    static readonly SUBSCRIPTION_CLOSED_WEBHOOK = 'subscription_closed';
     static readonly MEMBER_ADDED_WEBHOOK = 'member_added';
     static readonly MEMBER_REMOVED_WEBHOOK = 'member_removed';
 
@@ -190,8 +206,11 @@ export class App implements AppInterface {
         this.hasClientEventWebhooks = this.webhooks.filter(webhook => webhook.event_types.includes(App.CLIENT_EVENT_WEBHOOK)).length > 0;
         this.hasChannelOccupiedWebhooks = this.webhooks.filter(webhook => webhook.event_types.includes(App.CHANNEL_OCCUPIED_WEBHOOK)).length > 0;
         this.hasChannelVacatedWebhooks = this.webhooks.filter(webhook => webhook.event_types.includes(App.CHANNEL_VACATED_WEBHOOK)).length > 0;
+        this.hasSubscriptionSuccededWebhooks = this.webhooks.filter(webhook => webhook.event_types.includes(App.SUBSCRIPTION_SUCCEDED_WEBHOOK)).length > 0;
+        this.hasSubscriptionClosedWebhooks = this.webhooks.filter(webhook => webhook.event_types.includes(App.SUBSCRIPTION_CLOSED_WEBHOOK)).length > 0;
         this.hasMemberAddedWebhooks = this.webhooks.filter(webhook => webhook.event_types.includes(App.MEMBER_ADDED_WEBHOOK)).length > 0;
         this.hasMemberRemovedWebhooks = this.webhooks.filter(webhook => webhook.event_types.includes(App.MEMBER_REMOVED_WEBHOOK)).length > 0;
+        this.hasServerStartupWebhooks = this.webhooks.filter(webhook => webhook.event_types.includes(App.SERVER_STARTUP_WEBHOOK)).length > 0;
     }
 
     /**

@@ -382,12 +382,12 @@ export class WsHandler {
 
             // Make sure to update the socket after new data was pushed in.
             this.server.adapter.addSocket(ws.app.id, ws);
-
+            this.server.webhookSender.sendSubscriptionSucceded(ws.app,ws.id, channel);
             // If the connection freshly joined, send the webhook:
             if (response.channelConnections === 1) {
                 this.server.webhookSender.sendChannelOccupied(ws.app, channel);
             }
-
+            
             // For non-presence channels, end with subscription succeeded.
             if (!(channelManager instanceof PresenceChannelManager)) {
                 let broadcastMessage = {
@@ -491,6 +491,7 @@ export class WsHandler {
 
                 // Make sure to update the socket after new data was pushed in.
                 this.server.adapter.addSocket(ws.app.id, ws);
+                this.server.webhookSender.sendSubscriptionClosed(ws.app,ws.id, channel);
 
                 if (response.remainingConnections === 0) {
                     this.server.webhookSender.sendChannelVacated(ws.app, channel);

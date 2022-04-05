@@ -26,4 +26,8 @@ export class BaseAppManager implements AppManagerInterface {
                 : null;
         });
     }
+
+    listApps(): Promise<App[]> {
+        return Promise.resolve([]);
+    }
 }

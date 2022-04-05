@@ -73,12 +73,21 @@ export abstract class SqlAppManager extends BaseAppManager {
         });
     }
 
+    listApps(): Promise<App[]> {
+        return this.selectAll().then(apps => apps.map(a => new App(a,this.server)))
+    }
+
     /**
      * Make a Knex selection for the app ID.
      */
     protected selectById(id: string): Promise<App[]> {
         return this.connection<App>(this.appsTableName())
             .where('id', id)
+            .select('*');
+    }
+
+    protected selectAll(): Promise<App[]> {
+        return this.connection<App>(this.appsTableName())
             .select('*');
     }
 

@@ -56,6 +56,11 @@ export class DynamoDbAppManager extends BaseAppManager {
         });
     }
 
+    listApps(): Promise<App[]> {
+        // unsupported
+        return new Promise(resolve=>resolve([]))
+    }
+
     /**
      * Find an app by given key.
      */
