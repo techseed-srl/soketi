@@ -1,7 +1,7 @@
 benchmark/vendor/
 build/
 coverage/
-dist/
+
 node_modules/
 production-app/
 .env
