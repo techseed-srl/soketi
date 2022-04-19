@@ -131,6 +131,7 @@ class WebhookSender {
             return;
         }
         this.sendWebhook(app, {
+            time_ms: (new Date).getTime(),
             name: app_1.App.SERVER_STARTUP_WEBHOOK,
             channel: 'startup',
         }, 'server_startup_webhooks');
